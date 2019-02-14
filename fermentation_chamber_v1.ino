@@ -10,6 +10,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <ArduinoJson.h>
+#include "AuthConstants.h"
 
 
 /*===================== CONSTANT DEFINITIONS =====================*/
@@ -39,8 +40,8 @@ const int LED_MONITOR_INTERVAL = 5 * 1000; // interval for led pulse during lcd 
 const int LED_PULSE_INTERVAL = 100; // length of led pulse
 
 // communications
-const char* SERVER_NAME = "F-Control";
-const char* SERVER_PASSWORD = "<server password here>";
+const char* SERVER_NAME = Authorization::SERVER_USER;
+const char* SERVER_PASSWORD = Authorization::SERVER_PASS;
 const int PORT = 2701;
 IPAddress ip(192, 168, 201, 11);
 IPAddress gateway(192, 168, 201, 1);
@@ -68,7 +69,7 @@ const char LCD_BLANK_LINE[21] = "                    "; // a null terminated com
 const int ANALOG_INPUT = A0; // analog input for push buttons
 
 // Monitor LED
-const int MONITOR_LED = 15; // NodeMCU D8 pin - ground side 
+const int MONITOR_LED = 15; // NodeMCU D8 pin - ground side
 
 
 /*===================== VARIABLE DEFINITIONS =====================*/
@@ -89,7 +90,7 @@ struct ioComponent {
   char ioType[7]; // "INPUT" or "OUTPUT"
   char type[20]; // such as "TEMPERATURE" or "CIRCULATION"
   char location[50]; // describes component location
-  int id; 
+  int id;
   float value; // measured or set value
   float target; // set desired value
   float tolerance; // tolerance +/- to target
@@ -288,7 +289,7 @@ void setup() {
 
   monitored = &chamberProbe; // default to chamberProbe on setup
   request.temperature = chamberProbe.target;
-  request.tolerance = chamberProbe.tolerance;    
+  request.tolerance = chamberProbe.tolerance;
 
   WiFi.softAP(SERVER_NAME, SERVER_PASSWORD);
   server.on("/", HTTP_GET, handleGetRequest);
@@ -310,7 +311,7 @@ void setup() {
 
 void loop() {
   server.handleClient(); // server handler
-  
+
   listenForButton(); // analog input listener
 
   if (millis() - timer.ioRefreshStart > IO_REFRESH_INTERVAL) {
@@ -330,7 +331,7 @@ void loop() {
         endCirculationCycle();
         timer.circulationStart = millis();
       }
-    } 
+    }
   }
 
   // refresh lcd
@@ -348,7 +349,7 @@ void loop() {
   // process user requests
   if (millis() - timer.requestStart > REQUEST_INTERVAL) {
     if (request.isPending) {
-      
+
       if (request.isThermowellEnabled) {
         float tempT = getTemperatureBySensor(thermowellProbe.deviceAddress);
         if (isValidTemperature(tempT)) {
@@ -360,7 +361,7 @@ void loop() {
         monitored = &chamberProbe;
         thermowellProbe.isEnabled = false;
       }
-      
+
       if (request.isCoolingEnabled) {
         cooling.isEnabled = true;
       } else {
@@ -374,7 +375,7 @@ void loop() {
         heating.isEnabled = false;
         heating.target = 0;
       }
-      
+
       monitored->target = request.temperature;
       monitored->tolerance = request.tolerance;
       request.isPending = false;
@@ -401,4 +402,3 @@ void loop() {
   }
 
 }
-
