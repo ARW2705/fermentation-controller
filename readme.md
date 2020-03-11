@@ -1,12 +1,23 @@
 # Fermentation Temperature Controller
 
-Work in Progress
+---
 
 This application and hardware setup provides a means to
 control cooling, heating, and ventilation with an
 insulated fermentation control chamber such as a small fridge.
 
-## Hardware
+*Work in progress. Currently undergoing live tests. Project updates will follow*
+
+
+## Getting Started
+
+---
+
+### Prerequisites
+
+To clone and run this application, you'll need [Git](https://git-scm.com/), [Arduino](https://www.arduino.cc/), and either [Arduino IDE](https://www.arduino.cc/en/Main/Software) or another compatible arduino compiler and loader.
+
+### Hardware
 
 * NodeMCU v1.0
 * 20x4 I2C LCD
@@ -20,25 +31,40 @@ insulated fermentation control chamber such as a small fridge.
 
 ![Fritzing breadboard diagram](fermentation_chamber_bb_v1.png)
 
-## Usage
+### Usage
 
-By default, the chamber temperature sensor, cooling system, 
+By default, the chamber temperature sensor, cooling system,
 and heating system are enabled.  The cooling and heating
-systems may be enabled/disabled indepenedently.  If enabled,
-the thermowell temperature sensor becomes the system's 
-operating input, the chamber sensor will still give it's
+systems may be enabled/disabled independently.  If enabled,
+the thermowell temperature sensor becomes the system's
+operating input, the chamber sensor will still report it's
 readings.
 
-## Future plans
+## Future Plans
 
-* Connect system to WIFI
-* Provide control via http
+---
+
+### Features
+
+* Integrate with [BrewIO](https://github.com/ARW2705/BrewIO-App)
 * Enable flightrecorder for analytics
 * Operate with premade control schedules
 
-## Author
+### Improvements
 
-Andrew Wanex
+* Refactor with singleton pattern
+* Update docs
+
+
+## Built With
+
+---
+
+* [Arduino](https://www.arduino.cc/) - Micro controller
+
 
 ## License
-[MIT](https://github.com/ARW2705/Fermentation-Control/blob/master/LICENSE)
+
+---
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/ARW2705/Fermentation-Control/blob/master/LICENSE) file for details.
